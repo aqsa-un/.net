@@ -3,276 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>جامعة الأقصى للعلوم والتكنولوجيا</title>
+    <title>جامعة الأقصى | نظام الإدارة الشامل</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap');
-        body { font-family: 'Tajawal', sans-serif; }
-        :root {
-            --gold: #B8860B; /* اللون الذهبي من الشعار */
-            --dark-gold: #8B6508;
-            --black: #1A1A1A;
-        }
-        .bg-gold { background-color: var(--gold); }
-        .text-gold { color: var(--gold); }
-        .border-gold { border-color: var(--gold); }
-        .hero-section {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1523050853021-ea759f9740b4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-attachment: fixed;
-        }
+        body { font-family: 'Tajawal', sans-serif; transition: 0.3s; }
+        .admin-only { display: none; }
+        .is-admin .admin-only { display: block; }
+        #control-sidebar { transform: translateX(100%); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        #control-sidebar.open { transform: translateX(0); }
+        .color-preview { width: 25px; height: 25px; border-radius: 50%; display: inline-block; border: 1px solid #ddd; }
     </style>
 </head>
-<body class="bg-gray-50 overflow-x-hidden">
+<body class="bg-gray-50 text-gray-800">
 
-    <div class="bg-black text-white py-2 text-sm">
-        <div class="container mx-auto px-4 flex justify-between items-center">
-            <div class="hidden md:flex gap-4">
-                <span><i class="fas fa-phone-alt ml-1"></i> +967 781 555 637</span>
-                <span><i class="fas fa-envelope ml-1"></i> info@al-aqsa.edu.ye</span>
+    <div id="control-sidebar" class="fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-[100] overflow-y-auto p-6 border-l-4 border-yellow-600">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-xl font-bold text-black border-b-2 border-yellow-600">إدارة المحتوى</h2>
+            <button onclick="toggleAdminSidebar()" class="text-red-500 text-2xl">&times;</button>
+        </div>
+
+        <div class="space-y-6">
+            <div class="p-3 bg-gray-50 rounded-lg">
+                <label class="block text-sm font-bold mb-2">اللون الأساسي (الهوية):</label>
+                <input type="color" id="color-picker" onchange="updateThemeColor(this.value)" class="w-full h-10 rounded cursor-pointer">
             </div>
-            <div class="flex gap-4">
-                <a href="#" class="hover:text-gold">البوابة الإلكترونية</a>
-                <span class="text-gray-500">|</span>
-                <a href="#" class="hover:text-gold">بريد الموظفين</a>
+
+            <div>
+                <label class="block text-sm font-bold mb-1">اسم الجامعة:</label>
+                <input type="text" id="edit-name" oninput="liveUpdate('display-name', this.value)" class="w-full p-2 border rounded">
             </div>
+
+            <div>
+                <label class="block text-sm font-bold mb-1">العنوان الترحيبي:</label>
+                <textarea id="edit-hero" oninput="liveUpdate('display-hero', this.value)" class="w-full p-2 border rounded h-24"></textarea>
+            </div>
+
+            <div>
+                <label class="block text-sm font-bold mb-1">رابط صورة البانر (URL):</label>
+                <input type="text" id="edit-hero-img" oninput="liveUpdateImg('hero-img', this.value)" class="w-full p-2 border rounded text-xs" placeholder="https://...">
+            </div>
+
+            <hr>
+            <h3 class="font-bold text-yellow-700">بيانات التواصل</h3>
+            <div>
+                <label class="block text-sm font-bold mb-1">واتساب:</label>
+                <input type="text" id="edit-phone" oninput="liveUpdate('display-phone', this.value)" class="w-full p-2 border rounded">
+            </div>
+
+            <button onclick="saveAllAndShield()" class="w-full bg-black text-white py-3 rounded-xl font-bold shadow-lg hover:bg-yellow-700 transition">حفظ التعديلات نهائياً</button>
         </div>
     </div>
 
-    <nav class="bg-white shadow-md sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <img src="https://i.imgur.com/uRov55K.jpg" alt="Logo" class="h-16">
-                <div class="hidden lg:block">
-                    <h1 class="text-xl font-bold text-black leading-tight">جامعة الأقصى</h1>
-                    <p class="text-xs text-gold font-semibold uppercase">للعلوم والتكنولوجيا</p>
-                </div>
-            </div>
+    <div id="login-modal" class="fixed inset-0 bg-black/90 hidden z-[110] flex items-center justify-center">
+        <div class="bg-white p-8 rounded-2xl w-80 shadow-2xl text-center">
+            <img src="https://i.imgur.com/uRov55K.jpg" class="h-20 mx-auto mb-4">
+            <h3 class="font-bold mb-4">تسجيل دخول الإدارة</h3>
+            <input type="password" id="pass-field" placeholder="كلمة المرور" class="w-full p-3 border rounded-lg mb-4 text-center focus:ring-2 focus:ring-yellow-600 outline-none">
+            <button onclick="attemptLogin()" class="w-full bg-black text-white py-3 rounded-lg font-bold">دخول</button>
+            <button onclick="closeLogin()" class="text-gray-400 mt-4 text-sm">إلغاء</button>
+        </div>
+    </div>
 
-            <div class="hidden lg:flex items-center space-x-6 space-x-reverse font-bold text-gray-700">
-                <a href="#" class="text-gold border-b-2 border-gold pb-1">الرئيسية</a>
-                <div class="group relative py-2">
-                    <button class="hover:text-gold flex items-center">عن الجامعة <i class="fas fa-chevron-down mr-1 text-xs"></i></button>
-                    <div class="absolute hidden group-hover:block bg-white shadow-xl mt-2 w-48 rounded border-t-4 border-gold p-2">
-                        <a href="#about" class="block p-2 hover:bg-gray-100 rounded">كلمة رئيس الجامعة</a>
-                        <a href="#" class="block p-2 hover:bg-gray-100 rounded">الرؤية والرسالة</a>
-                        <a href="#" class="block p-2 hover:bg-gray-100 rounded">الهيكل التنظيمي</a>
-                    </div>
-                </div>
-                <a href="#faculties" class="hover:text-gold">الكليات</a>
-                <a href="#admissions" class="hover:text-gold">التسجيل</a>
-                <a href="#services" class="hover:text-gold">شؤون الطلاب</a>
-                <a href="#research" class="hover:text-gold">البحث العلمي</a>
-            </div>
-
-            <div class="flex items-center gap-4">
-                <a href="#contact" class="hidden md:block bg-gold hover:bg-black text-white px-5 py-2 rounded-full transition duration-300">اتصل بنا</a>
-                <button id="menu-btn" class="lg:hidden text-2xl text-black focus:outline-none">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
+    <nav class="bg-black text-white py-2 px-4 flex justify-between items-center text-xs md:text-sm">
+        <div id="display-phone">+967 781 555 637</div>
+        <div class="flex gap-4">
+            <button onclick="openLogin()" id="login-nav-btn" class="hover:text-yellow-500 transition"><i class="fas fa-lock ml-1"></i> تسجيل الدخول</button>
+            <button onclick="logout()" class="admin-only text-red-400 font-bold"><i class="fas fa-sign-out-alt"></i> خروج</button>
         </div>
     </nav>
 
-    <div id="sidebar" class="fixed top-0 right-0 h-full w-72 bg-black text-white z-[60] transform translate-x-full transition-transform duration-300 shadow-2xl">
-        <div class="p-6">
-            <button id="close-btn" class="text-3xl mb-8">&times;</button>
-            <nav class="flex flex-col gap-6 text-lg">
-                <a href="#about" class="hover:text-gold">عن الجامعة</a>
-                <a href="#faculties" class="hover:text-gold">الكليات والتخصصات</a>
-                <a href="#admissions" class="hover:text-gold">القبول والتسجيل</a>
-                <a href="#services" class="hover:text-gold">الخدمات الطلابية</a>
-                <a href="#research" class="hover:text-gold">الأبحاث العلمية</a>
-                <a href="#contact" class="hover:text-gold text-gold">تواصل معنا</a>
-            </nav>
-        </div>
-    </div>
-
-    <header class="hero-section h-[600px] flex items-center justify-center text-center text-white px-4">
-        <div class="max-w-4xl">
-            <span class="bg-gold/20 text-gold px-4 py-1 rounded-full border border-gold mb-4 inline-block">مرحباً بكم في صرح العلم</span>
-            <h2 class="text-5xl md:text-7xl font-bold mb-6">نصنع القادة، لنبني المستقبل</h2>
-            <p class="text-xl md:text-2xl mb-8 text-gray-300">جامعة الأقصى للعلوم والتكنولوجيا - بيئة تعليمية متطورة تفتح لك آفاق التميز والابتكار.</p>
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="#admissions" class="bg-gold text-white px-10 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-gold transition">ابدأ رحلتك الآن</a>
-                <a href="#" class="bg-transparent border-2 border-white px-10 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-black transition">استكشف التخصصات</a>
+    <header class="bg-white shadow-md p-4 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="https://i.imgur.com/uRov55K.jpg" class="h-14">
+                <h1 id="display-name" class="text-xl md:text-2xl font-bold">جامعة الأقصى للعلوم والتكنولوجيا</h1>
             </div>
+            <button onclick="toggleAdminSidebar()" class="admin-only bg-yellow-600 text-white p-2 rounded-full shadow-lg pulse animate-bounce">
+                <i class="fas fa-edit"></i> تعديل الموقع
+            </button>
         </div>
     </header>
 
-    <section class="py-10 bg-white shadow-sm -mt-10 relative z-10 max-w-6xl mx-auto rounded-xl grid grid-cols-2 md:grid-cols-4 gap-6 text-center border-b-4 border-gold">
-        <div>
-            <div class="text-3xl font-bold text-gold">15+</div>
-            <div class="text-gray-600">تخصص معتمد</div>
-        </div>
-        <div>
-            <div class="text-3xl font-bold text-gold">500+</div>
-            <div class="text-gray-600">خريج سنوياً</div>
-        </div>
-        <div>
-            <div class="text-3xl font-bold text-gold">40+</div>
-            <div class="text-gray-600">كادر تدريسي</div>
-        </div>
-        <div>
-            <div class="text-3xl font-bold text-gold">24/7</div>
-            <div class="text-gray-600">دعم فني</div>
+    <section class="relative h-[450px] flex items-center justify-center text-center text-white bg-gray-800">
+        <img id="hero-img" src="https://images.unsplash.com/photo-1541339907198-e08756ebafe3?q=80" class="absolute inset-0 w-full h-full object-cover opacity-50">
+        <div class="relative z-10 p-4">
+            <h2 id="display-hero" class="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg">نصنع القادة، لنبني المستقبل</h2>
+            <p class="text-lg md:text-xl opacity-90">بيئة تعليمية رائدة بمعايير عالمية</p>
         </div>
     </section>
 
-    <section id="faculties" class="py-20 container mx-auto px-4">
-        <div class="text-center mb-16">
-            <h3 class="text-3xl font-bold text-black">كلياتنا المتميزة</h3>
-            <div class="w-24 h-1 bg-gold mx-auto mt-4"></div>
-        </div>
-        <div class="grid md:grid-cols-3 gap-8">
-            <div class="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition duration-500 border border-gray-100">
-                <div class="h-48 bg-black relative overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=500&q=80" alt="طب" class="w-full h-full object-cover group-hover:scale-110 transition duration-500 opacity-60">
-                    <div class="absolute bottom-4 right-4">
-                        <i class="fas fa-stethoscope text-gold text-4xl"></i>
-                    </div>
-                </div>
-                <div class="p-8">
-                    <h4 class="text-xl font-bold mb-4">كلية العلوم الطبية</h4>
-                    <p class="text-gray-500 mb-6 italic text-sm">إعداد كوادر صحية تساهم في الارتقاء بالواقع الصحي اليمني.</p>
-                    <ul class="space-y-3 mb-8">
-                        <li><i class="fas fa-check-circle text-gold ml-2"></i> قسم الصيدلة</li>
-                        <li><i class="fas fa-check-circle text-gold ml-2"></i> قسم التمريض</li>
-                        <li><i class="fas fa-check-circle text-gold ml-2"></i> قسم القبالة</li>
-                    </ul>
-                    <a href="#" class="inline-block text-black font-bold hover:text-gold underline underline-offset-8">دليل الكلية &larr;</a>
-                </div>
+    <section class="py-16 container mx-auto px-4">
+        <h3 class="text-center text-3xl font-bold mb-12 border-b-4 border-yellow-600 w-fit mx-auto pb-2">كليات الجامعة</h3>
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="bg-white p-6 rounded-2xl shadow-md border-r-8 border-yellow-600">
+                <h4 class="text-xl font-bold mb-4 text-yellow-700">كلية العلوم الطبية</h4>
+                <p class="text-gray-600 italic">تخصصات: صيدلة - تمريض - قبالة</p>
             </div>
-
-            <div class="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition duration-500 border border-gray-100">
-                <div class="h-48 bg-black relative overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=500&q=80" alt="تقنية" class="w-full h-full object-cover group-hover:scale-110 transition duration-500 opacity-60">
-                    <div class="absolute bottom-4 right-4">
-                        <i class="fas fa-laptop-code text-gold text-4xl"></i>
-                    </div>
-                </div>
-                <div class="p-8">
-                    <h4 class="text-xl font-bold mb-4">العلوم الإدارية والتقنية</h4>
-                    <p class="text-gray-500 mb-6 italic text-sm">دمج الإدارة بالتقنية الحديثة لتلبية احتياجات سوق العمل.</p>
-                    <div class="grid grid-cols-2 gap-2 text-sm">
-                        <span class="bg-gray-100 p-2 rounded">إدارة أعمال</span>
-                        <span class="bg-gray-100 p-2 rounded">محاسبة</span>
-                        <span class="bg-gray-100 p-2 rounded">نظم معلومات</span>
-                        <span class="bg-gray-100 p-2 rounded">شريعة وقانون</span>
-                    </div>
-                </div>
-            </div>
-
-            <div id="admissions" class="bg-black text-white rounded-3xl p-8 flex flex-col justify-center">
-                <h4 class="text-2xl font-bold mb-4 text-gold">القبول والتسجيل</h4>
-                <p class="mb-6">يمكنك التقديم عبر الإنترنت أو زيارة مكتب القبول في الحرم الجامعي.</p>
-                <div class="space-y-4">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-gold rounded-full flex items-center justify-center text-black font-bold">1</div>
-                        <span class="text-sm">تعبئة طلب الالتحاق</span>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-gold rounded-full flex items-center justify-center text-black font-bold">2</div>
-                        <span class="text-sm">إرفاق الشهادات المطلوبة</span>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-gold rounded-full flex items-center justify-center text-black font-bold">3</div>
-                        <span class="text-sm">سداد الرسوم وتأكيد القبول</span>
-                    </div>
-                </div>
-                <button class="mt-8 border-2 border-gold text-gold hover:bg-gold hover:text-black py-3 rounded font-bold transition">دليل القبول 2024/2025</button>
+            <div class="bg-white p-6 rounded-2xl shadow-md border-r-8 border-yellow-600">
+                <h4 class="text-xl font-bold mb-4 text-yellow-700">كلية العلوم الإدارية</h4>
+                <p class="text-gray-600 italic">تخصصات: إدارة أعمال - محاسبة - نظم معلومات</p>
             </div>
         </div>
     </section>
 
-    <section id="contact" class="py-20 bg-gray-50">
-        <div class="container mx-auto px-4 grid md:grid-cols-2 gap-12">
-            <div>
-                <h3 class="text-4xl font-bold mb-6">كن على <span class="text-gold">اتصال</span> بنا</h3>
-                <p class="text-gray-600 mb-8 text-lg">يسعدنا استقبال استفساراتكم وملاحظاتكم. فريق الدعم متاح طوال ساعات العمل.</p>
-                
-                <div class="space-y-6">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-white shadow-md rounded-full flex items-center justify-center text-gold"><i class="fas fa-map-marker-alt"></i></div>
-                        <div>
-                            <p class="font-bold">الموقع</p>
-                            <p class="text-gray-500">اليمن - صنعاء (أو عنوان الجامعة المحدد)</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-white shadow-md rounded-full flex items-center justify-center text-gold"><i class="fab fa-whatsapp"></i></div>
-                        <div>
-                            <p class="font-bold">واتساب</p>
-                            <p class="text-gray-500">+967 781 555 637</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white p-8 rounded-3xl shadow-2xl border-t-4 border-gold">
-                <form class="space-y-4">
-                    <div class="grid grid-cols-2 gap-4">
-                        <input type="text" placeholder="الاسم" class="w-full p-4 bg-gray-50 border rounded-xl focus:outline-none focus:border-gold">
-                        <input type="email" placeholder="البريد" class="w-full p-4 bg-gray-50 border rounded-xl focus:outline-none focus:border-gold">
-                    </div>
-                    <select class="w-full p-4 bg-gray-50 border rounded-xl focus:outline-none focus:border-gold">
-                        <option>الاستفسار عن القبول</option>
-                        <option>شؤون الطلاب</option>
-                        <option>أخرى</option>
-                    </select>
-                    <textarea placeholder="رسالتك هنا..." class="w-full p-4 bg-gray-50 border rounded-xl h-32 focus:outline-none focus:border-gold"></textarea>
-                    <button class="w-full bg-black text-white py-4 rounded-xl font-bold hover:bg-gold transition shadow-lg">إرسال الرسالة</button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-black text-white pt-16 pb-8">
-        <div class="container mx-auto px-4 grid md:grid-cols-4 gap-12">
-            <div class="col-span-1 md:col-span-1 text-center md:text-right">
-                <img src="https://i.imgur.com/uRov55K.jpg" alt="Footer Logo" class="h-24 mx-auto md:mx-0 mb-4 brightness-0 invert">
-                <p class="text-gray-400">جامعة الأقصى للعلوم والتكنولوجيا - حيث يلتقي التميز الأكاديمي بالتطور التقني.</p>
-            </div>
-            <div>
-                <h5 class="text-gold font-bold mb-6 text-xl">روابط سريعة</h5>
-                <ul class="space-y-3 text-gray-400">
-                    <li><a href="#" class="hover:text-white transition italic">المجلة العلمية للجامعة</a></li>
-                    <li><a href="#" class="hover:text-white transition italic">المكتبة الرقمية</a></li>
-                    <li><a href="#" class="hover:text-white transition italic">التقويم الأكاديمي</a></li>
-                    <li><a href="#" class="hover:text-white transition italic">بوابة الخريجين</a></li>
-                </ul>
-            </div>
-            <div>
-                <h5 class="text-gold font-bold mb-6 text-xl">الإدارة العليا</h5>
-                <ul class="space-y-3 text-gray-400 text-sm">
-                    <li>المؤسس: أ. عادل علي مساعد</li>
-                    <li>رئيس الجامعة: د. حمود القديمي</li>
-                    <li>أمين عام الجامعة: د. خالد مساعد</li>
-                </ul>
-            </div>
-            <div>
-                <h5 class="text-gold font-bold mb-6 text-xl">تابعنا</h5>
-                <div class="flex gap-4 text-2xl">
-                    <a href="#" class="hover:text-gold transition"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="hover:text-gold transition"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="hover:text-gold transition"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" class="hover:text-gold transition"><i class="fab fa-youtube"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="text-center mt-16 pt-8 border-t border-gray-800 text-gray-500 text-sm">
-            <p>جميع الحقوق محفوظة &copy; 2024 جامعة الأقصى للعلوم والتكنولوجيا</p>
-        </div>
+    <footer class="bg-black text-white py-8 text-center mt-12">
+        <p>&copy; 2024 جميع الحقوق محفوظة لجامعة الأقصى | تم التطوير بواسطة "الاصدار الذكي"</p>
     </footer>
 
     <script>
-        const menuBtn = document.getElementById('menu-btn');
-        const closeBtn = document.getElementById('close-btn');
-        const sidebar = document.getElementById('sidebar');
+        const passKey = "sayhi1322";
 
-        menuBtn.onclick = () => sidebar.classList.remove('translate-x-full');
-        closeBtn.onclick = () => sidebar.classList.add('translate-x-full');
+        // وظائف تسجيل الدخول
+        function openLogin() { document.getElementById('login-modal').classList.remove('hidden'); }
+        function closeLogin() { document.getElementById('login-modal').classList.add('hidden'); }
+        
+        function attemptLogin() {
+            const val = document.getElementById('pass-field').value;
+            if(val === passKey) {
+                localStorage.setItem('univ_admin', 'true');
+                location.reload();
+            } else {
+                alert('عذراً، كلمة المرور غير صحيحة');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('univ_admin');
+            location.reload();
+        }
+
+        // وظائف لوحة التحكم
+        function toggleAdminSidebar() {
+            document.getElementById('control-sidebar').classList.toggle('open');
+        }
+
+        function liveUpdate(id, val) { document.getElementById(id).innerText = val; }
+        function liveUpdateImg(id, val) { document.getElementById(id).src = val; }
+
+        function updateThemeColor(color) {
+            document.querySelectorAll('.border-yellow-600').forEach(el => el.style.borderColor = color);
+            document.querySelectorAll('.text-yellow-700').forEach(el => el.style.color = color);
+            document.querySelectorAll('.bg-yellow-600').forEach(el => el.style.backgroundColor = color);
+        }
+
+        function saveAllAndShield() {
+            const siteData = {
+                name: document.getElementById('edit-name').value,
+                hero: document.getElementById('edit-hero').value,
+                heroImg: document.getElementById('edit-hero-img').value,
+                phone: document.getElementById('edit-phone').value,
+                theme: document.getElementById('color-picker').value
+            };
+            localStorage.setItem('aqsa_settings', JSON.stringify(siteData));
+            alert('تم حفظ كافة التغييرات بنجاح!');
+            toggleAdminSidebar();
+        }
+
+        // تحميل البيانات عند البدء
+        window.onload = function() {
+            const isAdmin = localStorage.getItem('univ_admin');
+            if(isAdmin === 'true') {
+                document.body.classList.add('is-admin');
+                document.getElementById('login-nav-btn').classList.add('hidden');
+            }
+
+            const saved = JSON.parse(localStorage.getItem('aqsa_settings'));
+            if(saved) {
+                document.getElementById('display-name').innerText = saved.name || "جامعة الأقصى للعلوم والتكنولوجيا";
+                document.getElementById('display-hero').innerText = saved.hero || "نصنع القادة، لنبني المستقبل";
+                document.getElementById('hero-img').src = saved.heroImg || "https://images.unsplash.com/photo-1541339907198-e08756ebafe3?q=80";
+                document.getElementById('display-phone').innerText = saved.phone || "+967 781 555 637";
+                
+                // تعبئة حقول المدخلات في اللوحة
+                document.getElementById('edit-name').value = saved.name || "";
+                document.getElementById('edit-hero').value = saved.hero || "";
+                document.getElementById('edit-hero-img').value = saved.heroImg || "";
+                document.getElementById('edit-phone').value = saved.phone || "";
+                document.getElementById('color-picker').value = saved.theme || "#B8860B";
+                updateThemeColor(saved.theme);
+            }
+        };
     </script>
 </body>
 </html>
