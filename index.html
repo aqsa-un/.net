@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جامعة الأقصى - الإدارة السحابية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <style>
+        :root { --primary: #003366; --gold: #f39c12; --light: #f4f4f4; --white: #fff; --red: #e74c3c; }
+        body { margin: 0; font-family: 'Cairo', sans-serif; background: var(--light); direction: rtl; }
+        header { background: var(--white); padding: 15px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-around; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .logo { font-weight: bold; color: var(--primary); font-size: 1.2rem; }
+        .section { display: none; padding: 20px; }
+        .section.active { display: block; }
+        .btn { padding: 8px 15px; border-radius: 5px; cursor: pointer; border: none; font-family: 'Cairo'; }
+        .btn-primary { background: var(--primary); color: white; }
+        .news-card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-right: 5px solid var(--gold); position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        input, textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-family: 'Cairo'; }
+        .delete-btn { color: var(--red); cursor: pointer; float: left; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo"><i class="fas fa-university"></i> جامعة الأقصى</div>
+        <button class="btn btn-primary" onclick="showPage('loginPage')">دخول المشرف</button>
+    </header>
+
+    <div id="homePage" class="section active">
+        <h2 style="text-align: center; color: var(--primary);">آخر أخبار الجامعة</h2>
+        <div id="newsContainer">جاري جلب الأخبار...</div>
+    </div>
+
+    <div id="loginPage" class="section">
+        <div style="max-width: 300px; margin: auto; background: white; padding: 20px; border-radius: 10px;">
+            <h3>تسجيل الدخول</h3>
+            <input type="text" id="user" placeholder="الاسم (admin)">
+            <input type="password" id="pass" placeholder="الرمز (123)">
+            <button class="btn btn-primary" style="width: 100%;" onclick="login()">دخول</button>
+            <button class="btn" style="width: 100%; margin-top: 10px;" onclick="showPage('homePage')">رجوع</button>
+        </div>
+    </div>
+
+    <div id="adminPage" class="section">
+        <div style="max-width: 500px; margin: auto;">
+            <h3>لوحة التحكم - نشر خبر</h3>
+            <input type="text" id="title" placeholder="عنوان الخبر">
+            <textarea id="desc" rows="4" placeholder="تفاصيل الخبر"></textarea>
+            <button class="btn btn-primary" style="width: 100%;" onclick="publish()">نشر الآن</button>
+            <hr>
+            <h4>الأخبار الحالية (للحذف)</h4>
+            <div id="adminList"></div>
+            <button class="btn" style="background: #666; color: white; width: 100%;" onclick="logout()">خروج</button>
+        </div>
+    </div>
+
+    <script>
+        // بياناتك الخاصة التي استخرجناها
+        const firebaseConfig = {
+            apiKey: "AIzaSyCymqlC7QfKyS_XY73zjHkDW-IK3KcBCxI",
+            databaseURL: "https://alaqsa-university-6c2ad-default-rtdb.firebaseio.com/"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // جلب الأخبار من القاعدة
+        function loadNews() {
+            db.ref('news').on('value', (snapshot) => {
+                const data = snapshot.val();
+                let html = ""; let adminHtml = "";
+                for (let id in data) {
+                    html += `<div class="news-card"><h3>${data[id].title}</h3><p>${data[id].desc}</p></div>`;
+                    adminHtml += `<div class="news-card"><span class="delete-btn" onclick="deleteNews('${id}')">حذف <i class="fas fa-trash"></i></span><h3>${data[id].title}</h3></div>`;
+                }
+                document.getElementById('newsContainer').innerHTML = html || "لا توجد أخبار حالياً.";
+                document.getElementById('adminList').innerHTML = adminHtml;
+            });
+        }
+
+        loadNews();
+
+        function publish() {
+            const title = document.getElementById('title').value;
+            const desc = document.getElementById('desc').value;
+            if(title && desc) {
+                db.ref('news').push({ title, desc });
+                document.getElementById('title').value = "";
+                document.getElementById('desc').value = "";
+                alert("تم النشر بنجاح!");
+            }
+        }
+
+        function deleteNews(id) {
+            if(confirm("هل أنت متأكد؟")) db.ref('news/' + id).remove();
+        }
+
+        function login() {
+            const u = document.getElementById('user').value;
+            const p = document.getElementById('pass').value;
+            if(u === "admin" && p === "123") showPage('adminPage');
+            else alert("خطأ في البيانات");
+        }
+
+        function logout() { showPage('homePage'); }
+
+        function showPage(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+    </script>
+</body>
+</html>
