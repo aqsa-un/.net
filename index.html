@@ -13,8 +13,6 @@
         .admin-sidebar.active { transform: translateX(0); }
         .is-admin .admin-btn { display: inline-flex; }
         .admin-btn { display: none; }
-        .gold-border { border-color: #B8860B; }
-        .gold-text { color: #B8860B; }
         .gold-bg { background-color: #B8860B; }
     </style>
 </head>
@@ -30,31 +28,48 @@
             <section class="bg-slate-800 p-3 rounded-lg border-r-4 border-green-500">
                 <h3 class="text-sm font-bold text-green-400 mb-2 uppercase italic">تحديث آخر خبر</h3>
                 <input type="text" id="in-news-title" placeholder="عنوان الخبر" class="w-full bg-slate-700 p-2 rounded mb-2 text-sm">
-                <textarea id="in-news-desc" placeholder="وصف الخبر" class="w-full bg-slate-700 p-2 rounded mb-2 text-sm h-20"></textarea>
+                <textarea id="in-news-desc" placeholder="محتوى الخبر التفصيلي" class="w-full bg-slate-700 p-2 rounded mb-2 text-sm h-24"></textarea>
             </section>
 
             <section class="p-2 border-t border-slate-700">
                 <h3 class="text-sm font-bold text-gray-400 mb-2 uppercase">الإدارة العليا</h3>
-                <input type="text" id="in-founder" placeholder="المؤسس" class="w-full bg-slate-800 p-2 rounded mb-2 border border-slate-700">
-                <input type="text" id="in-rector" placeholder="رئيس الجامعة" class="w-full bg-slate-800 p-2 rounded mb-2 border border-slate-700">
-                <input type="text" id="in-sec" placeholder="الأمين العام" class="w-full bg-slate-800 p-2 rounded border border-slate-700">
+                <input type="text" id="in-founder" class="w-full bg-slate-800 p-2 rounded mb-2 border border-slate-700 text-sm">
+                <input type="text" id="in-rector" class="w-full bg-slate-800 p-2 rounded mb-2 border border-slate-700 text-sm">
+                <input type="text" id="in-sec" class="w-full bg-slate-800 p-2 rounded border border-slate-700 text-sm">
             </section>
 
             <section>
                 <h3 class="text-sm font-bold text-gray-400 mb-2 uppercase">بيانات التواصل</h3>
-                <input type="text" id="in-phone" placeholder="رقم الهاتف" class="w-full bg-slate-800 p-2 rounded mb-2 border border-slate-700">
+                <input type="text" id="in-phone" class="w-full bg-slate-800 p-2 rounded mb-2 border border-slate-700 text-sm">
             </section>
 
-            <button onclick="saveChanges()" class="w-full bg-yellow-600 hover:bg-yellow-500 text-black font-bold py-3 rounded-lg transition shadow-lg shadow-yellow-900/20">حفظ وتحديث الموقع</button>
-            <button onclick="logout()" class="w-full bg-red-600 py-2 rounded-lg mt-4 opacity-80 hover:opacity-100 transition">تسجيل الخروج</button>
+            <button onclick="saveChanges()" class="w-full bg-yellow-600 hover:bg-yellow-500 text-black font-bold py-3 rounded-lg transition shadow-lg">حفظ وتحديث الموقع</button>
+            <button onclick="logout()" class="w-full bg-red-600 py-2 rounded-lg mt-4 opacity-80 hover:opacity-100 transition text-sm">تسجيل الخروج</button>
         </div>
     </div>
 
     <div id="loginModal" class="fixed inset-0 bg-black/80 hidden z-[110] flex items-center justify-center">
         <div class="bg-white p-8 rounded-2xl w-full max-w-sm text-center shadow-2xl">
             <h3 class="text-xl font-bold mb-4">نظام إدارة المحتوى</h3>
-            <input type="password" id="passInput" placeholder="كلمة المرور" class="w-full p-3 border rounded-lg mb-4 text-center outline-yellow-600">
+            <input type="password" id="passInput" placeholder="كلمة المرور" class="w-full p-3 border rounded-lg mb-4 text-center outline-yellow-600 font-bold">
             <button onclick="checkLogin()" class="w-full bg-black text-white py-3 rounded-lg font-bold hover:bg-yellow-600 hover:text-black transition">تأكيد الدخول</button>
+            <button onclick="closeLogin()" class="text-gray-400 mt-4 text-xs block mx-auto underline">إلغاء</button>
+        </div>
+    </div>
+
+    <div id="newsModal" class="fixed inset-0 bg-black/90 hidden z-[120] flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl">
+            <div class="bg-yellow-600 p-6 text-black flex justify-between items-center">
+                <h4 class="font-bold text-xl italic"><i class="fas fa-newspaper ml-2"></i> تفاصيل الخبر</h4>
+                <button onclick="closeNews()" class="text-3xl leading-none">&times;</button>
+            </div>
+            <div class="p-8">
+                <h3 id="modal-news-title" class="text-2xl font-bold mb-6 text-black border-b pb-4"></h3>
+                <div id="modal-news-desc" class="text-gray-700 leading-relaxed text-lg whitespace-pre-line h-64 overflow-y-auto pr-2"></div>
+            </div>
+            <div class="p-4 bg-gray-50 text-center">
+                <button onclick="closeNews()" class="bg-black text-white px-8 py-2 rounded-xl font-bold">إغلاق</button>
+            </div>
         </div>
     </div>
 
@@ -62,12 +77,12 @@
         <div class="flex items-center gap-4">
             <img src="https://i.imgur.com/uRov55K.jpg" class="h-12 rounded shadow-sm">
             <div class="hidden md:block">
-                <h1 id="out-uniName" class="font-bold text-lg leading-tight">جامعة الأقصى للعلوم والتكنولوجيا</h1>
+                <h1 class="font-bold text-lg leading-tight text-white">جامعة الأقصى للعلوم والتكنولوجيا</h1>
                 <p class="text-[10px] text-yellow-500 font-bold uppercase tracking-widest italic">Al-Aqsa University For Science & Technology</p>
             </div>
         </div>
-        <div class="flex gap-6 items-center">
-            <div class="hidden lg:flex gap-6 font-medium text-sm">
+        <div class="flex gap-6 items-center text-sm">
+            <div class="hidden lg:flex gap-6 font-medium">
                 <a href="#home" class="hover:text-yellow-500 transition">الرئيسية</a>
                 <a href="#about" class="hover:text-yellow-500 transition">عن الجامعة</a>
                 <a href="#faculties" class="hover:text-yellow-500 transition">الكليات</a>
@@ -78,27 +93,29 @@
         </div>
     </nav>
 
-    <header id="home" class="relative h-[400px] bg-slate-900 flex items-center justify-center text-center">
-        <img src="https://images.unsplash.com/photo-1523050853021-ea759f9740b4?q=80" class="absolute inset-0 w-full h-full object-cover opacity-30">
-        <div class="relative z-10 px-4">
-            <span class="bg-yellow-600/20 text-yellow-500 px-3 py-1 rounded-full border border-yellow-600 text-xs mb-4 inline-block font-bold">بوابة المستقبل الأكاديمي</span>
-            <h2 class="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg">نصنع القادة، لنبني المستقبل</h2>
-            <p class="text-xl text-yellow-500 font-bold">منارة العلم والمعرفة في قلب اليمن</p>
+    <header id="home" class="relative h-[500px] bg-slate-900 flex items-center justify-center text-center px-4">
+        <img src="https://images.unsplash.com/photo-1523050853021-ea759f9740b4?q=80" class="absolute inset-0 w-full h-full object-cover opacity-20">
+        <div class="relative z-10 max-w-4xl">
+            <h1 class="text-4xl md:text-7xl font-bold text-white mb-6 drop-shadow-2xl tracking-tight leading-tight">جامعة الأقصى <br class="md:hidden"> <span class="text-yellow-600">للعلوم والتكنولوجيا</span></h1>
+            
+            <span class="bg-yellow-600/20 text-yellow-500 px-6 py-2 rounded-full border border-yellow-600 text-sm md:text-lg mb-8 inline-block font-bold shadow-lg">بوابة المستقبل الأكاديمي</span>
+            
+            <p class="text-xl md:text-2xl text-gray-300 font-bold mt-4 italic">نصنع القادة، لنبني المستقبل</p>
         </div>
     </header>
 
     <section class="py-8 bg-white border-b overflow-hidden">
         <div class="container mx-auto px-4">
-            <div class="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl border-r-8 border-yellow-600 shadow-sm relative">
-                <div class="bg-yellow-600 text-black px-4 py-2 rounded-lg font-bold animate-pulse whitespace-nowrap">
+            <div onclick="openNews()" class="group flex items-center gap-4 bg-gray-50 p-4 rounded-2xl border-r-8 border-yellow-600 shadow-sm relative cursor-pointer hover:bg-yellow-50 transition duration-300">
+                <div class="bg-yellow-600 text-black px-4 py-2 rounded-lg font-bold animate-pulse whitespace-nowrap shadow-md">
                     <i class="fas fa-bullhorn ml-2"></i> آخر الأخبار
                 </div>
                 <div class="flex-1 overflow-hidden">
-                    <h3 id="out-news-title" class="font-bold text-lg md:text-xl truncate text-black">فتح باب القبول والتسجيل للعام الجامعي الجديد 2024/2025</h3>
-                    <p id="out-news-desc" class="text-gray-500 text-sm md:text-base line-clamp-1 italic">تعلن جامعة الأقصى للعلوم والتكنولوجيا عن بدء استقبال طلبات الالتحاق في كافة الكليات الطبية والإدارية.</p>
+                    <h3 id="out-news-title" class="font-bold text-lg md:text-xl truncate text-black group-hover:text-yellow-700 transition"></h3>
+                    <p class="text-gray-500 text-sm line-clamp-1 italic">اضغط هنا لقراءة تفاصيل الخبر بالكامل...</p>
                 </div>
-                <div class="hidden md:block text-xs text-gray-400 font-bold italic">
-                    <i class="far fa-clock ml-1"></i> تحديث اليوم
+                <div class="text-yellow-600 font-bold text-sm hidden md:flex items-center gap-2">
+                    قراءة المزيد <i class="fas fa-chevron-left animate-bounce-x"></i>
                 </div>
             </div>
         </div>
@@ -107,25 +124,25 @@
     <section id="about" class="py-16 container mx-auto px-4">
         <div class="grid md:grid-cols-2 gap-12 items-center">
             <div>
-                <h3 class="text-3xl font-bold mb-6 border-r-4 border-yellow-600 pr-4">عن الجامعة</h3>
+                <h3 class="text-3xl font-bold mb-6 border-r-4 border-yellow-600 pr-4 italic uppercase">عن الجامعة</h3>
                 <p class="text-gray-600 leading-relaxed mb-6">تعتبر جامعة الأقصى للعلوم والتكنولوجيا صرحاً أكاديمياً متميزاً يهدف إلى تخريج كوادر مؤهلة علمياً وعملياً في تخصصات نوعية تخدم سوق العمل المحلي والإقليمي.</p>
                 <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                    <h4 class="font-bold text-yellow-700 mb-4"><i class="fas fa-users-cog ml-2"></i> مجلس الإدارة</h4>
+                    <h4 class="font-bold text-yellow-700 mb-6 border-b pb-2"><i class="fas fa-users-cog ml-2"></i> مجلس الإدارة العليا</h4>
                     <ul class="space-y-4">
-                        <li class="flex items-center gap-3"><div class="w-8 h-8 gold-bg rounded flex items-center justify-center text-black font-bold text-xs italic">A.A</div> <div><p class="text-[10px] text-gray-400">مؤسس الجامعة</p><strong id="out-founder">أستاذ عادل علي مساعد</strong></div></li>
-                        <li class="flex items-center gap-3"><div class="w-8 h-8 gold-bg rounded flex items-center justify-center text-black font-bold text-xs italic">H.A</div> <div><p class="text-[10px] text-gray-400">رئيس الجامعة</p><strong id="out-rector">دكتور حمود القديمي</strong></div></li>
-                        <li class="flex items-center gap-3"><div class="w-8 h-8 gold-bg rounded flex items-center justify-center text-black font-bold text-xs italic">K.M</div> <div><p class="text-[10px] text-gray-400">الأمين العام</p><strong id="out-sec">دكتور خالد مساعد</strong></div></li>
+                        <li class="flex items-center gap-3"><div class="w-10 h-10 gold-bg rounded-lg flex items-center justify-center text-black font-bold italic shadow-sm">A.A</div> <div><p class="text-[10px] text-gray-400 font-bold uppercase">مؤسس الجامعة</p><strong id="out-founder" class="text-lg"></strong></div></li>
+                        <li class="flex items-center gap-3"><div class="w-10 h-10 gold-bg rounded-lg flex items-center justify-center text-black font-bold italic shadow-sm">H.A</div> <div><p class="text-[10px] text-gray-400 font-bold uppercase">رئيس الجامعة</p><strong id="out-rector" class="text-lg"></strong></div></li>
+                        <li class="flex items-center gap-3"><div class="w-10 h-10 gold-bg rounded-lg flex items-center justify-center text-black font-bold italic shadow-sm">K.M</div> <div><p class="text-[10px] text-gray-400 font-bold uppercase">الأمين العام</p><strong id="out-sec" class="text-lg"></strong></div></li>
                     </ul>
                 </div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="bg-black text-white p-6 rounded-3xl border-b-4 border-yellow-600">
-                    <h4 class="text-yellow-500 font-bold mb-2 italic">الرؤية</h4>
-                    <p class="text-sm leading-relaxed">التميز في جودة التعليم العالي والبحث العلمي وبناء شراكات مجتمعية رائدة.</p>
+            <div class="grid grid-cols-1 gap-4">
+                <div class="bg-black text-white p-8 rounded-3xl border-b-8 border-yellow-600 shadow-xl">
+                    <h4 class="text-yellow-500 font-bold mb-4 text-2xl italic">الرؤية</h4>
+                    <p class="text-lg leading-relaxed opacity-90">التميز في جودة التعليم العالي والبحث العلمي وبناء شراكات مجتمعية رائدة.</p>
                 </div>
-                <div class="bg-yellow-600 text-black p-6 rounded-3xl shadow-xl">
-                    <h4 class="font-bold mb-2 italic text-black">الرسالة</h4>
-                    <p class="text-sm leading-relaxed text-black/80 font-medium">تقديم برامج أكاديمية متطورة تلبي احتياجات التنمية وتساهم في بناء مجتمع المعرفة.</p>
+                <div class="bg-yellow-600 text-black p-8 rounded-3xl shadow-xl">
+                    <h4 class="font-bold mb-4 text-2xl italic">الرسالة</h4>
+                    <p class="text-lg leading-relaxed font-bold">تقديم برامج أكاديمية متطورة تلبي احتياجات التنمية وتساهم في بناء مجتمع المعرفة.</p>
                 </div>
             </div>
         </div>
@@ -133,28 +150,28 @@
 
     <section id="faculties" class="py-16 bg-gray-100">
         <div class="container mx-auto px-4 text-center">
-            <h3 class="text-3xl font-bold mb-12 italic">كلياتنا وتخصصاتنا</h3>
+            <h3 class="text-3xl font-bold mb-12 italic border-b-2 border-yellow-600 w-fit mx-auto pb-2">كلياتنا وتخصصاتنا</h3>
             <div class="grid md:grid-cols-2 gap-8">
-                <div class="bg-white rounded-3xl overflow-hidden shadow-xl border-t-8 border-red-700 group hover:scale-[1.02] transition duration-300">
+                <div class="bg-white rounded-3xl overflow-hidden shadow-xl border-t-8 border-red-700 hover:scale-[1.02] transition duration-300">
                     <div class="p-8">
-                        <i class="fas fa-hand-holding-medical text-5xl text-red-700 mb-4 group-hover:rotate-12 transition"></i>
+                        <i class="fas fa-hand-holding-medical text-6xl text-red-700 mb-4"></i>
                         <h4 class="text-2xl font-bold mb-4">كلية العلوم الطبية</h4>
                         <div class="flex flex-wrap justify-center gap-3">
-                            <span class="bg-red-50 text-red-700 px-4 py-2 rounded-xl font-bold border border-red-100">صيدلة</span>
-                            <span class="bg-red-50 text-red-700 px-4 py-2 rounded-xl font-bold border border-red-100">تمريض</span>
-                            <span class="bg-red-50 text-red-700 px-4 py-2 rounded-xl font-bold border border-red-100">قبالة</span>
+                            <span class="bg-red-50 text-red-700 px-6 py-2 rounded-xl font-bold border border-red-100">صيدلة</span>
+                            <span class="bg-red-50 text-red-700 px-6 py-2 rounded-xl font-bold border border-red-100">تمريض</span>
+                            <span class="bg-red-50 text-red-700 px-6 py-2 rounded-xl font-bold border border-red-100">قبالة</span>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-3xl overflow-hidden shadow-xl border-t-8 border-yellow-600 group hover:scale-[1.02] transition duration-300">
+                <div class="bg-white rounded-3xl overflow-hidden shadow-xl border-t-8 border-yellow-600 hover:scale-[1.02] transition duration-300">
                     <div class="p-8">
-                        <i class="fas fa-laptop-code text-5xl text-yellow-600 mb-4 group-hover:-rotate-12 transition"></i>
+                        <i class="fas fa-laptop-code text-6xl text-yellow-600 mb-4"></i>
                         <h4 class="text-2xl font-bold mb-4">العلوم الإدارية والتقنية</h4>
                         <div class="grid grid-cols-2 gap-3">
-                            <span class="bg-gray-50 p-3 rounded-xl font-bold italic border border-gray-100">إدارة أعمال</span>
-                            <span class="bg-gray-50 p-3 rounded-xl font-bold italic border border-gray-100">محاسبة</span>
-                            <span class="bg-gray-50 p-3 rounded-xl font-bold italic border border-gray-100">نظم معلومات</span>
-                            <span class="bg-gray-50 p-3 rounded-xl font-bold italic border border-gray-100">شريعة وقانون</span>
+                            <span class="bg-gray-50 p-4 rounded-xl font-bold italic border border-gray-100 shadow-sm">إدارة أعمال</span>
+                            <span class="bg-gray-50 p-4 rounded-xl font-bold italic border border-gray-100 shadow-sm">محاسبة</span>
+                            <span class="bg-gray-50 p-4 rounded-xl font-bold italic border border-gray-100 shadow-sm">نظم معلومات</span>
+                            <span class="bg-gray-50 p-4 rounded-xl font-bold italic border border-gray-100 shadow-sm">شريعة وقانون</span>
                         </div>
                     </div>
                 </div>
@@ -163,51 +180,73 @@
     </section>
 
     <section id="contact" class="py-16 container mx-auto px-4">
-        <div class="bg-black text-white rounded-[40px] p-8 md:p-16 overflow-hidden relative shadow-2xl">
-            <div class="absolute top-0 left-0 w-full h-1 bg-yellow-600"></div>
-            <div class="grid md:grid-cols-2 gap-12 relative z-10 items-center">
+        <div class="bg-black text-white rounded-[40px] p-8 md:p-16 relative shadow-2xl overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-600/10 rounded-full blur-3xl"></div>
+            <div class="grid md:grid-cols-2 gap-12 relative z-10">
                 <div>
-                    <h3 class="text-5xl font-bold mb-6 italic text-white leading-tight">جاهز للبدء؟ <br><span class="text-yellow-600 underline">اتصل بنا</span></h3>
+                    <h3 class="text-5xl font-bold mb-6 italic leading-tight">جاهز للبدء؟ <br><span class="text-yellow-600 underline decoration-white">اتصل بنا</span></h3>
                     <div class="space-y-6 mt-10">
                         <div class="flex items-center gap-4 text-xl">
-                            <div class="w-12 h-12 rounded-full border border-yellow-600 flex items-center justify-center"><i class="fab fa-whatsapp text-green-500"></i></div>
-                            <span id="out-phone" class="font-bold tracking-widest">+967 781 555 637</span>
+                            <i class="fab fa-whatsapp text-green-500 text-3xl"></i>
+                            <span id="out-phone" class="font-bold tracking-widest text-2xl"></span>
                         </div>
-                        <div class="flex items-center gap-4 text-xl">
-                            <div class="w-12 h-12 rounded-full border border-yellow-600 flex items-center justify-center"><i class="fab fa-facebook text-blue-500"></i></div>
-                            <a href="#" class="hover:text-yellow-500 transition text-sm">جامعة الأقصى للعلوم والتكنولوجيا - الصفحة الرسمية</a>
+                        <div class="flex items-center gap-4">
+                            <i class="fab fa-facebook text-blue-500 text-3xl"></i>
+                            <span class="text-sm opacity-80 italic">جامعة الأقصى للعلوم والتكنولوجيا - الصفحة الرسمية</span>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white text-black p-8 rounded-3xl shadow-2xl transform md:rotate-2">
+                <div class="bg-white text-black p-8 rounded-3xl">
                     <h4 class="font-bold mb-4 border-b pb-2 text-xl italic text-yellow-700">طلب استفسار سريع</h4>
-                    <input type="text" placeholder="اسم الطالب" class="w-full p-4 bg-gray-50 border rounded-xl mb-3 outline-none focus:border-yellow-600">
+                    <input type="text" placeholder="اسم الطالب" class="w-full p-4 bg-gray-50 border rounded-xl mb-3 outline-none focus:border-yellow-600 font-bold">
                     <textarea placeholder="ما هو استفسارك؟" class="w-full p-4 bg-gray-50 border rounded-xl h-24 mb-4 outline-none focus:border-yellow-600"></textarea>
-                    <button class="w-full bg-black text-white font-bold py-4 rounded-2xl hover:bg-yellow-600 hover:text-black transition-all shadow-lg">إرسال الاستفسار <i class="fas fa-paper-plane mr-2"></i></button>
+                    <button class="w-full bg-black text-white font-bold py-4 rounded-2xl hover:bg-yellow-600 transition shadow-lg">إرسال الاستفسار <i class="fas fa-paper-plane mr-2"></i></button>
                 </div>
             </div>
         </div>
     </section>
 
     <footer class="py-10 text-center text-gray-400 text-xs tracking-widest">
-        <p>&copy; 2026 جميع الحقوق محفوظة لجامعة الأقصى للعلوم والتكنولوجيا | صمم بواسطة المهندس امجد عادل مساعد</p>
+        <p>&copy; 2024 جميع الحقوق محفوظة لجامعة الأقصى للعلوم والتكنولوجيا</p>
     </footer>
 
     <script>
         const MASTER_PASS = "sayhi1322";
 
-        // إدارة الحالة (Admin Logic)
+        // الروابط والتحكم
         function showLogin() { document.getElementById('loginModal').classList.remove('hidden'); }
+        function closeLogin() { document.getElementById('loginModal').classList.add('hidden'); }
         function checkLogin() {
             if(document.getElementById('passInput').value === MASTER_PASS) {
-                localStorage.setItem('univ_auth_v2', 'active');
+                localStorage.setItem('univ_auth_v3', 'active');
                 location.reload();
-            } else { alert('عذراً، كلمة المرور خاطئة'); }
+            } else { alert('كلمة المرور غير صحيحة'); }
         }
-        function logout() { localStorage.removeItem('univ_auth_v2'); location.reload(); }
+        function logout() { localStorage.removeItem('univ_auth_v3'); location.reload(); }
         function toggleAdmin() { document.getElementById('adminPanel').classList.toggle('active'); }
 
-        // حفظ البيانات الكاملة
+        // نافذة الأخبار
+        function openNews() {
+            const data = JSON.parse(localStorage.getItem('aqsa_data_v3')) || defaultData;
+            document.getElementById('modal-news-title').innerText = data.newsTitle;
+            document.getElementById('modal-news-desc').innerText = data.newsDesc;
+            document.getElementById('newsModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeNews() {
+            document.getElementById('newsModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        const defaultData = {
+            founder: "الأستاذ عادل علي مساعد",
+            rector: "الدكتور حمود القديمي",
+            sec: "الدكتور خالد مساعد",
+            phone: "+967 781 555 637",
+            newsTitle: "فتح باب القبول والتسجيل للعام الجامعي الجديد 2024/2025",
+            newsDesc: "تعلن جامعة الأقصى للعلوم والتكنولوجيا عن بدء استقبال طلبات الالتحاق في كافة الكليات الطبية والإدارية للعام الدراسي الجديد. يرجى زيارة قسم القبول في مقر الجامعة لاستكمال إجراءات التسجيل وإرفاق الوثائق المطلوبة."
+        };
+
         function saveChanges() {
             const data = {
                 founder: document.getElementById('in-founder').value,
@@ -217,31 +256,20 @@
                 newsTitle: document.getElementById('in-news-title').value,
                 newsDesc: document.getElementById('in-news-desc').value
             };
-            localStorage.setItem('aqsa_data_v2', JSON.stringify(data));
+            localStorage.setItem('aqsa_data_v3', JSON.stringify(data));
             applyData();
             toggleAdmin();
-            alert('تم تحديث الموقع بنجاح!');
+            alert('تم حفظ التعديلات بنجاح!');
         }
 
-        // تطبيق البيانات في الموقع
         function applyData() {
-            const saved = JSON.parse(localStorage.getItem('aqsa_data_v2')) || {
-                founder: "الأستاذ عادل علي مساعد",
-                rector: "الدكتور حمود القديمي",
-                sec: "الدكتور خالد مساعد",
-                phone: "+967 781 555 637",
-                newsTitle: "فتح باب القبول والتسجيل للعام الجامعي الجديد 2024/2025",
-                newsDesc: "تعلن جامعة الأقصى للعلوم والتكنولوجيا عن بدء استقبال طلبات الالتحاق في كافة الكليات الطبية والإدارية."
-            };
-
-            // عرض البيانات
+            const saved = JSON.parse(localStorage.getItem('aqsa_data_v3')) || defaultData;
             document.getElementById('out-founder').innerText = saved.founder;
             document.getElementById('out-rector').innerText = saved.rector;
             document.getElementById('out-sec').innerText = saved.sec;
             document.getElementById('out-phone').innerText = saved.phone;
             document.getElementById('out-news-title').innerText = saved.newsTitle;
-            document.getElementById('out-news-desc').innerText = saved.newsDesc;
-
+            
             // تعبئة حقول لوحة التحكم
             document.getElementById('in-founder').value = saved.founder;
             document.getElementById('in-rector').value = saved.rector;
@@ -253,7 +281,7 @@
 
         window.onload = function() {
             applyData();
-            if(localStorage.getItem('univ_auth_v2') === 'active') {
+            if(localStorage.getItem('univ_auth_v3') === 'active') {
                 document.body.classList.add('is-admin');
                 document.getElementById('loginBtn').style.display = 'none';
                 document.getElementById('adminTools').classList.remove('hidden');
