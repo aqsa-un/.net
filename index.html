@@ -19,7 +19,6 @@
         }
         .logo-pulsing { animation: logo-pulse 3s infinite ease-in-out; }
 
-        /* تعديل لوحة التحكم لتظهر بشكل كامل وغير مقصوص */
         .admin-sidebar { 
             transform: translateX(100%); 
             transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
@@ -38,7 +37,6 @@
         .admin-sidebar.active { transform: translateX(0); }
         .is-admin .admin-btn { display: inline-flex !important; }
         
-        .logo-style { mix-blend-mode: multiply; }
         .btn-hover { transition: all 0.3s ease; }
         .btn-hover:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
     </style>
@@ -80,8 +78,8 @@
                 <label class="text-[10px] text-gray-400 block mb-1">عن الجامعة</label>
                 <textarea id="in-about-text" class="w-full bg-slate-700 p-2 rounded h-20 text-xs outline-none"></textarea>
             </div>
-            <button onclick="saveChanges()" class="w-full bg-yellow-600 text-black font-bold py-3 rounded-xl hover:bg-yellow-500 transition mt-4 shadow-lg">حفظ كافة التعديلات</button>
-            <button onclick="logout()" class="w-full bg-red-600 py-2 rounded-lg mt-2 text-xs opacity-80 hover:opacity-100">تسجيل الخروج</button>
+            <button onclick="saveChanges()" class="w-full bg-yellow-600 text-black font-bold py-3 rounded-xl hover:bg-yellow-500 transition mt-4 shadow-lg">حفظ التعديلات</button>
+            <button onclick="logout()" class="w-full bg-red-600 py-2 rounded-lg mt-2 text-xs opacity-80 hover:opacity-100">خروج</button>
         </div>
     </div>
 
@@ -90,7 +88,7 @@
             <h3 class="text-2xl font-black mb-6">دخول المشرف</h3>
             <input type="password" id="passInput" placeholder="كلمة المرور" class="w-full p-4 border-2 rounded-2xl mb-6 text-center outline-none focus:border-yellow-600">
             <button onclick="checkLogin()" class="w-full bg-black text-white py-4 rounded-2xl font-bold btn-hover">تأكيد</button>
-            <button onclick="closeLogin()" class="mt-4 text-gray-400 underline block mx-auto">إلغاء</button>
+            <button onclick="closeLogin()" class="mt-4 text-gray-400 underline block mx-auto font-bold">إلغاء</button>
         </div>
     </div>
 
@@ -119,6 +117,7 @@
                 <a href="#home" class="hover:text-yellow-500 transition">الرئيسية</a>
                 <a href="#about" class="hover:text-yellow-500 transition">عن الجامعة</a>
                 <a href="#faculties" class="hover:text-yellow-500 transition">الكليات</a>
+                <a href="#contact" class="hover:text-yellow-500 transition">تواصل معنا</a>
             </div>
             <button onclick="showLogin()" id="loginBtn" class="bg-yellow-600 text-black px-4 py-2 rounded-lg font-bold text-xs btn-hover">دخول</button>
             <button onclick="toggleAdmin()" id="adminTools" class="admin-btn bg-green-600 text-white px-4 py-2 rounded-lg hidden text-xs font-bold items-center gap-1 btn-hover"><i class="fas fa-cog"></i> الإدارة</button>
@@ -129,7 +128,7 @@
         <img src="https://images.unsplash.com/photo-1541339907198-e08756ebafe3?q=80" class="absolute inset-0 w-full h-full object-cover opacity-30">
         <div class="relative z-10">
             <h1 class="uni-title text-4xl md:text-7xl font-black text-white mb-4 italic drop-shadow-2xl">جامعة الأقصى <span class="text-yellow-600">للعلوم والتكنولوجيا</span></h1>
-            <p class="text-xl md:text-3xl text-gray-200 font-bold italic bg-black/40 inline-block px-6 py-2 rounded-full">نصنع القادة لبناء المستقبل</p>
+            <p class="text-xl md:text-3xl text-gray-200 font-bold italic bg-black/40 inline-block px-6 py-2 rounded-full shadow-lg">نصنع القادة لبناء المستقبل</p>
         </div>
     </header>
 
@@ -164,7 +163,7 @@
             <ul class="space-y-6">
                 <li class="flex items-center gap-4 border-b pb-4">
                     <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center text-yellow-500 font-bold italic">A.M</div>
-                    <div><p class="text-xs text-gray-400">المؤسس ورئيس مجلس الأمناء</p><strong id="out-founder" class="text-lg text-black"></strong></div>
+                    <div><p class="text-xs text-gray-400">المؤسس والمالك</p><strong id="out-founder" class="text-lg text-black"></strong></div>
                 </li>
                 <li class="flex items-center gap-4 border-b pb-4">
                     <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center text-yellow-500 font-bold italic">H.Q</div>
@@ -180,7 +179,9 @@
 
     <section id="faculties" class="py-20 bg-gray-100">
         <div class="container mx-auto px-4 text-center">
-            <h3 class="uni-title text-4xl font-black mb-16 italic border-b-4 border-yellow-600 w-fit mx-auto pb-4">كلياتنا وتخصصاتنا</h3>
+            <h3 class="uni-title text-4xl font-black mb-4 italic border-b-4 border-yellow-600 w-fit mx-auto pb-2">كلياتنا وتخصصاتنا</h3>
+            <p class="text-yellow-700 font-bold text-lg mb-12 italic underline underline-offset-8 decoration-black">تمنح الجامعة درجة البكالوريوس في التخصصات التالية:</p>
+            
             <div class="grid md:grid-cols-2 gap-8">
                 <div class="bg-white rounded-[40px] p-10 shadow-xl border-t-8 border-red-700 hover:scale-105 transition">
                     <i class="fas fa-heartbeat text-6xl text-red-700 mb-6"></i>
@@ -205,23 +206,33 @@
         </div>
     </section>
 
-    <footer id="contact" class="py-20 bg-black text-white">
-        <div class="container mx-auto px-4 grid lg:grid-cols-2 gap-16">
-            <div>
-                <h3 class="uni-title text-5xl font-black text-yellow-500 mb-6 italic">تواصل معنا</h3>
-                <p id="out-address" class="text-xl mb-10 opacity-80 leading-relaxed"></p>
-                <div class="flex flex-wrap gap-6">
-                    <a id="out-phone-link" href="#" target="_blank" class="flex items-center gap-3 bg-green-600 px-8 py-4 rounded-2xl font-black hover:bg-green-500 transition shadow-lg">
-                        <i class="fab fa-whatsapp text-2xl"></i> <span id="out-phone"></span>
-                    </a>
-                    <a id="out-fb-link" href="#" target="_blank" class="flex items-center gap-3 bg-blue-600 px-8 py-4 rounded-2xl font-black hover:bg-blue-500 transition shadow-lg">
-                        <i class="fab fa-facebook text-2xl"></i> <span>فيسبوك</span>
-                    </a>
+    <footer id="contact" class="py-12 bg-black text-white border-t-4 border-yellow-600">
+        <div class="container mx-auto px-6">
+            <div class="grid lg:grid-cols-3 gap-10 items-start">
+                
+                <div class="lg:col-span-2 space-y-6">
+                    <div>
+                        <h3 class="uni-title text-2xl font-black text-yellow-500 mb-2 italic">تواصل معنا</h3>
+                        <p id="out-address" class="text-sm text-gray-300 leading-relaxed max-w-xl"></p>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-4">
+                        <a id="out-phone-link" href="#" target="_blank" class="flex items-center gap-2 bg-green-600 px-5 py-3 rounded-xl font-bold text-xs hover:bg-green-500 transition shadow-lg">
+                            <i class="fab fa-whatsapp text-lg"></i> <span id="out-phone"></span>
+                        </a>
+                        <a id="out-fb-link" href="#" target="_blank" class="flex items-center gap-2 bg-blue-600 px-5 py-3 rounded-xl font-bold text-xs hover:bg-blue-500 transition shadow-lg">
+                            <i class="fab fa-facebook text-lg"></i> <span>صفحة الفيسبوك</span>
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <div class="text-right opacity-40 italic flex flex-col justify-end">
-                <p class="text-2xl mb-2 font-black">جامعة الأقصى للعلوم والتكنولوجيا</p>
-                <p>&copy; 2024 - 2025 جميع الحقوق محفوظة - صنعاء - اليمن</p>
+
+                <div class="text-right lg:text-left border-r lg:border-r-0 lg:border-l border-gray-800 pr-6 lg:pl-6 flex flex-col justify-center">
+                    <p class="text-lg font-black text-white mb-1">جامعة الأقصى</p>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest mb-4">للعـلوم والـتـكنولوجـيا</p>
+                    <p class="text-[11px] text-gray-400 italic">&copy; 2024 - 2025 جميع الحقوق محفوظة</p>
+                    <p class="text-[11px] text-yellow-600 font-bold mt-1">صنعاء - الجمهورية اليمنية</p>
+                </div>
+
             </div>
         </div>
     </footer>
@@ -300,7 +311,7 @@
                 aboutText: document.getElementById('in-about-text').value
             };
             localStorage.setItem('aqsa_data_v9', JSON.stringify(data));
-            alert('تم الحفظ بنجاح!');
+            alert('تم حفظ التعديلات بنجاح!');
             location.reload();
         }
 
