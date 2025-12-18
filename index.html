@@ -10,8 +10,6 @@
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&family=Tajawal:wght@400;700&display=swap');
         
         body { font-family: 'Tajawal', sans-serif; scroll-behavior: smooth; }
-        
-        /* خط اسم الجامعة الاحترافي */
         .uni-title { font-family: 'Cairo', sans-serif; }
 
         .admin-sidebar { transform: translateX(100%); transition: 0.5s ease-in-out; }
@@ -19,90 +17,63 @@
         .is-admin .admin-btn { display: inline-flex; }
         .admin-btn { display: none; }
         
-        /* تأثير النبض الاحترافي للشعار */
         @keyframes logo-pulse {
-            0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(184, 134, 11, 0.4)); }
-            50% { transform: scale(1.08); filter: drop-shadow(0 0 25px rgba(184, 134, 11, 0.9)); }
-            100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(184, 134, 11, 0.4)); }
+            0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(218, 165, 32, 0.4)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 20px rgba(218, 165, 32, 0.8)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(218, 165, 32, 0.4)); }
         }
-        .logo-pulsing {
-            animation: logo-pulse 3s infinite ease-in-out;
-        }
-        
-        /* إزالة الخلفية البيضاء من الشعار برمجياً */
-        .transparent-logo {
-            mix-blend-mode: screen; /* يجعل اللون الأسود شفافاً في الخلفيات الفاتحة أو العكس حسب السياق */
-            filter: contrast(1.1) brightness(1.1);
-        }
+        .logo-pulsing { animation: logo-pulse 3s infinite ease-in-out; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 text-right">
 
     <div id="adminPanel" class="admin-sidebar fixed top-0 right-0 h-full w-80 bg-slate-900 text-white z-[100] shadow-2xl overflow-y-auto p-6 text-sm">
-        <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-4 text-right">
-            <h2 class="text-xl font-bold text-yellow-500 italic">إدارة المحتوى الشاملة</h2>
-            <button onclick="toggleAdmin()" class="text-white text-2xl leading-none">&times;</button>
+        <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-4">
+            <h2 class="text-xl font-bold text-yellow-500 italic">لوحة التحكم الشاملة</h2>
+            <button onclick="toggleAdmin()" class="text-white text-2xl">&times;</button>
         </div>
         
-        <div class="space-y-6 text-right">
+        <div class="space-y-6">
             <section class="bg-slate-800 p-3 rounded-lg border-r-4 border-yellow-500">
-                <h3 class="font-bold text-yellow-500 mb-2 italic text-xs">رابط الشعار الشفاف</h3>
+                <h3 class="font-bold text-yellow-500 mb-2 italic">رابط الشعار</h3>
                 <input type="text" id="in-logo" class="w-full bg-slate-700 p-2 rounded outline-none text-xs">
             </section>
-
             <section class="bg-slate-800 p-3 rounded-lg border-r-4 border-green-500">
-                <h3 class="font-bold text-green-400 mb-2 italic">قسم الأخبار</h3>
-                <input type="text" id="in-news-title" class="w-full bg-slate-700 p-2 rounded mb-2 outline-none">
-                <textarea id="in-news-desc" class="w-full bg-slate-700 p-2 rounded h-20 outline-none"></textarea>
+                <h3 class="font-bold text-green-400 mb-2 italic">الأخبار</h3>
+                <input type="text" id="in-news-title" class="w-full bg-slate-700 p-2 rounded mb-2">
+                <textarea id="in-news-desc" class="w-full bg-slate-700 p-2 rounded h-20"></textarea>
             </section>
-
             <section class="bg-slate-800 p-3 rounded-lg border-r-4 border-blue-500">
-                <h3 class="font-bold text-blue-500 mb-2 italic text-xs">عن الجامعة / الرؤية / الرسالة</h3>
-                <textarea id="in-about-text" class="w-full bg-slate-700 p-2 rounded mb-2 h-16 outline-none text-xs"></textarea>
-                <textarea id="in-vision" class="w-full bg-slate-700 p-2 rounded mb-2 h-16 outline-none text-xs"></textarea>
-                <textarea id="in-mission" class="w-full bg-slate-700 p-2 rounded h-16 outline-none text-xs"></textarea>
+                <h3 class="font-bold text-blue-500 mb-2 italic">عن الجامعة والرسالة</h3>
+                <textarea id="in-about-text" class="w-full bg-slate-700 p-2 rounded mb-2 h-16"></textarea>
+                <textarea id="in-vision" class="w-full bg-slate-700 p-2 rounded mb-2 h-16"></textarea>
+                <textarea id="in-mission" class="w-full bg-slate-700 p-2 rounded h-16"></textarea>
             </section>
-
             <section class="bg-slate-800 p-3 rounded-lg border-r-4 border-purple-500">
-                <h3 class="font-bold text-purple-400 mb-2 italic">بيانات التواصل</h3>
-                <input type="text" id="in-phone" placeholder="967..." class="w-full bg-slate-700 p-2 rounded mb-2 outline-none">
-                <input type="text" id="in-fb" placeholder="رابط الفيسبوك" class="w-full bg-slate-700 p-2 rounded mb-2 outline-none text-xs">
-                <input type="text" id="in-address" placeholder="العنوان" class="w-full bg-slate-700 p-2 rounded outline-none text-xs">
+                <h3 class="font-bold text-purple-400 mb-2 italic">التواصل والعنوان</h3>
+                <input type="text" id="in-phone" class="w-full bg-slate-700 p-2 rounded mb-2">
+                <input type="text" id="in-address" class="w-full bg-slate-700 p-2 rounded text-xs">
             </section>
 
-            <button onclick="saveChanges()" class="w-full bg-yellow-600 hover:bg-yellow-500 text-black font-bold py-4 rounded-xl transition shadow-xl">حفظ التعديلات نهائياً</button>
-            <button onclick="logout()" class="w-full bg-red-600 py-2 rounded-lg mt-4 text-xs opacity-80">تسجيل الخروج</button>
+            <button onclick="saveChanges()" class="w-full bg-yellow-600 hover:bg-yellow-500 text-black font-bold py-4 rounded-xl shadow-xl transition">حفظ التعديلات</button>
+            <button onclick="logout()" class="w-full bg-red-600 py-2 rounded-lg mt-4 opacity-80">خروج</button>
         </div>
     </div>
 
     <div id="loginModal" class="fixed inset-0 bg-black/80 hidden z-[110] flex items-center justify-center">
-        <div class="bg-white p-8 rounded-2xl w-full max-w-sm text-center shadow-2xl">
+        <div class="bg-white p-8 rounded-2xl w-full max-w-sm text-center">
             <h3 class="text-xl font-bold mb-4 italic">دخول المشرف</h3>
             <input type="password" id="passInput" placeholder="كلمة المرور" class="w-full p-3 border rounded-lg mb-4 text-center font-bold">
             <button onclick="checkLogin()" class="w-full bg-black text-white py-3 rounded-lg font-bold">تأكيد</button>
-            <button onclick="closeLogin()" class="text-xs text-gray-400 mt-2 block mx-auto">إغلاق</button>
-        </div>
-    </div>
-
-    <div id="newsModal" class="fixed inset-0 bg-black/90 hidden z-[120] flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl">
-            <div class="bg-yellow-600 p-6 text-black flex justify-between items-center">
-                <h4 class="font-bold text-xl italic"><i class="fas fa-newspaper ml-2"></i> تفاصيل الخبر</h4>
-                <button onclick="closeNews()" class="text-3xl">&times;</button>
-            </div>
-            <div class="p-8 text-right">
-                <h3 id="modal-news-title" class="text-2xl font-bold mb-4 text-black border-b pb-4"></h3>
-                <div id="modal-news-desc" class="text-gray-700 leading-relaxed h-64 overflow-y-auto"></div>
-            </div>
         </div>
     </div>
 
     <nav class="bg-black text-white py-2 px-6 flex justify-between items-center sticky top-0 z-50 shadow-md border-b-2 border-yellow-600">
         <div class="flex items-center gap-4">
-            <img id="out-logo" src="https://i.ibb.co/XfqfH6r/Screenshot.jpg" class="h-16 md:h-24 object-contain logo-pulsing bg-transparent" style="mix-blend-mode: screen;"> 
-            <div class="hidden md:block text-right">
-                <h1 class="uni-title text-xl md:text-3xl leading-tight text-white font-black tracking-tight">جامعة الأقصى للعلوم والتكنولوجيا</h1>
-                <p class="text-[10px] text-yellow-500 font-bold uppercase italic">Al-Aqsa University For Science & Technology</p>
+            <img id="out-logo" src="https://i.ibb.co/XfqfH6r/Screenshot.jpg" class="h-16 md:h-24 object-contain logo-pulsing" style="mix-blend-mode: screen;"> 
+            <div class="hidden md:block">
+                <h1 class="uni-title text-xl md:text-3xl font-black text-white leading-tight">جامعة الأقصى للعلوم والتكنولوجيا</h1>
+                <p class="text-[10px] text-yellow-500 font-bold uppercase italic tracking-widest">Al-Aqsa University For Science & Technology</p>
             </div>
         </div>
         <div class="flex gap-4 items-center">
@@ -112,101 +83,102 @@
                 <a href="#faculties" class="hover:text-yellow-500 transition">الكليات</a>
                 <a href="#contact" class="hover:text-yellow-500 transition">اتصل بنا</a>
             </div>
-            <button onclick="showLogin()" id="loginBtn" class="bg-yellow-600 text-black px-4 py-1 rounded font-bold hover:bg-white transition text-sm">دخول</button>
+            <button onclick="showLogin()" id="loginBtn" class="bg-yellow-600 text-black px-4 py-1 rounded font-bold text-sm">دخول</button>
             <button onclick="toggleAdmin()" id="adminTools" class="admin-btn bg-green-600 text-white px-4 py-1 rounded hidden gap-2 text-sm"><i class="fas fa-cog"></i> الإدارة</button>
         </div>
     </nav>
 
-    <header id="home" class="relative h-[550px] bg-slate-900 flex items-center justify-center text-center px-4 overflow-hidden">
+    <header id="home" class="relative h-[500px] bg-slate-900 flex items-center justify-center text-center px-4">
         <img src="https://images.unsplash.com/photo-1541339907198-e08756ebafe3?q=80" class="absolute inset-0 w-full h-full object-cover opacity-20">
         <div class="relative z-10 max-w-5xl">
-            <h1 class="uni-title text-5xl md:text-8xl font-black text-white mb-8 drop-shadow-2xl italic tracking-tighter">جامعة الأقصى <br class="md:hidden"> <span class="text-yellow-600 underline decoration-white/20">للعلوم والتكنولوجيا</span></h1>
-            <span class="bg-yellow-600 text-black px-10 py-3 rounded-full text-xl md:text-2xl mb-10 inline-block font-black shadow-2xl">بوابة المستقبل الأكاديمي</span>
-            <p class="text-xl md:text-2xl text-gray-300 font-bold mt-4 italic">نصنع القادة، لنبني المستقبل</p>
+            <h1 class="uni-title text-5xl md:text-8xl font-black text-white mb-6 drop-shadow-2xl italic">جامعة الأقصى <br class="md:hidden"> <span class="text-yellow-600">للعلوم والتكنولوجيا</span></h1>
+            <span class="bg-yellow-600 text-black px-10 py-3 rounded-full text-xl md:text-2xl font-black shadow-2xl">بوابة المستقبل الأكاديمي</span>
         </div>
     </header>
 
-    <section class="py-8 bg-white border-b-2">
+    <section class="py-6 bg-white border-b">
         <div class="container mx-auto px-4">
-            <div onclick="openNews()" class="group flex items-center gap-4 bg-gray-50 p-4 rounded-3xl border-r-[12px] border-yellow-600 shadow-md cursor-pointer hover:bg-yellow-50 transition duration-300">
-                <div class="bg-yellow-600 text-black px-5 py-2 rounded-2xl font-bold animate-pulse shadow-lg italic">
-                    <i class="fas fa-bullhorn ml-2"></i> آخر الأخبار
-                </div>
-                <div class="flex-1 overflow-hidden text-right">
-                    <h3 id="out-news-title" class="font-bold text-lg md:text-2xl truncate text-black"></h3>
-                    <p class="text-gray-500 text-sm italic font-medium">انقر لمزيد من التفاصيل...</p>
-                </div>
+            <div onclick="openNews()" class="bg-gray-50 p-4 rounded-3xl border-r-8 border-yellow-600 flex items-center gap-4 cursor-pointer hover:bg-yellow-50 transition">
+                <span class="bg-yellow-600 text-black px-4 py-1 rounded-xl font-bold animate-pulse text-sm">جديدنا</span>
+                <h3 id="out-news-title" class="font-bold text-lg md:text-xl truncate"></h3>
             </div>
         </div>
     </section>
 
-    <section id="about" class="py-16 container mx-auto px-4">
-        <div class="grid lg:grid-cols-2 gap-12 text-right">
-            <div class="space-y-8">
-                <div>
-                    <h3 class="uni-title text-4xl font-bold mb-6 border-r-8 border-yellow-600 pr-4 italic">عن الجامعة</h3>
-                    <p id="out-about-text" class="text-gray-600 leading-relaxed text-lg font-medium"></p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-black text-white p-8 rounded-[40px] border-b-8 border-yellow-600 shadow-2xl">
-                        <h4 class="uni-title text-yellow-500 font-bold mb-4 text-2xl italic">الرؤية</h4>
-                        <p id="out-vision" class="leading-relaxed opacity-90"></p>
-                    </div>
-                    <div class="bg-yellow-600 text-black p-8 rounded-[40px] shadow-2xl">
-                        <h4 class="uni-title font-bold mb-4 text-2xl italic">الرسالة</h4>
-                        <p id="out-mission" class="leading-relaxed font-bold"></p>
-                    </div>
-                </div>
+    <section id="about" class="py-16 container mx-auto px-4 grid lg:grid-cols-2 gap-12 text-right">
+        <div class="space-y-8">
+            <div>
+                <h3 class="uni-title text-4xl font-bold mb-4 border-r-8 border-yellow-600 pr-4 italic">عن الجامعة</h3>
+                <p id="out-about-text" class="text-gray-600 leading-relaxed text-lg font-medium"></p>
             </div>
-            
-            <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 h-fit">
-                <h4 class="uni-title font-bold text-yellow-700 mb-8 border-b-2 pb-4 text-2xl italic"><i class="fas fa-id-card-alt ml-2"></i> مجلس الإدارة العليا</h4>
-                <ul class="space-y-6">
-                    <li class="flex items-center gap-5 border-b pb-4"><div class="w-14 h-14 bg-black rounded-2xl flex items-center justify-center text-yellow-500 font-black italic shadow-lg text-xl">A.A</div> <div><p class="text-xs text-gray-400 font-bold">مؤسس الجامعة</p><strong id="out-founder" class="text-xl text-black"></strong></div></li>
-                    <li class="flex items-center gap-5 border-b pb-4"><div class="w-14 h-14 bg-black rounded-2xl flex items-center justify-center text-yellow-500 font-black italic shadow-lg text-xl">H.A</div> <div><p class="text-xs text-gray-400 font-bold">رئيس الجامعة</p><strong id="out-rector" class="text-xl text-black"></strong></div></li>
-                    <li class="flex items-center gap-5"><div class="w-14 h-14 bg-black rounded-2xl flex items-center justify-center text-yellow-500 font-black italic shadow-lg text-xl">K.M</div> <div><p class="text-xs text-gray-400 font-bold">الأمين العام</p><strong id="out-sec" class="text-xl text-black"></strong></div></li>
-                </ul>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="bg-black text-white p-6 rounded-3xl border-b-4 border-yellow-600"><h4 class="text-yellow-500 font-bold mb-2 text-xl italic">الرؤية</h4><p id="out-vision" class="text-sm opacity-90"></p></div>
+                <div class="bg-yellow-600 text-black p-6 rounded-3xl"><h4 class="font-bold mb-2 text-xl italic">الرسالة</h4><p id="out-mission" class="text-sm font-bold"></p></div>
+            </div>
+        </div>
+        <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100">
+            <h4 class="uni-title font-bold text-yellow-700 mb-6 text-2xl italic border-b pb-2">مجلس الإدارة</h4>
+            <ul class="space-y-4">
+                <li class="flex justify-between border-b pb-2"><span>مؤسس الجامعة:</span> <strong id="out-founder"></strong></li>
+                <li class="flex justify-between border-b pb-2"><span>رئيس الجامعة:</span> <strong id="out-rector"></strong></li>
+                <li class="flex justify-between"><span>الأمين العام:</span> <strong id="out-sec"></strong></li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="faculties" class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4 text-center">
+            <h3 class="uni-title text-4xl font-bold mb-12 italic border-b-4 border-yellow-600 w-fit mx-auto pb-2">كلياتنا وتخصصاتنا</h3>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-[40px] p-10 shadow-2xl border-t-8 border-red-700 hover:scale-105 transition">
+                    <i class="fas fa-user-md text-6xl text-red-700 mb-4"></i>
+                    <h4 class="text-2xl font-black mb-6">كلية العلوم الطبية</h4>
+                    <div class="flex flex-wrap justify-center gap-3">
+                        <span class="bg-red-50 text-red-700 px-6 py-2 rounded-2xl font-bold border border-red-100 shadow-sm">صيدلة</span>
+                        <span class="bg-red-50 text-red-700 px-6 py-2 rounded-2xl font-bold border border-red-100 shadow-sm">تمريض</span>
+                        <span class="bg-red-50 text-red-700 px-6 py-2 rounded-2xl font-bold border border-red-100 shadow-sm">قبالة</span>
+                    </div>
+                </div>
+                <div class="bg-white rounded-[40px] p-10 shadow-2xl border-t-8 border-yellow-600 hover:scale-105 transition">
+                    <i class="fas fa-laptop-code text-6xl text-yellow-600 mb-4"></i>
+                    <h4 class="text-2xl font-black mb-6">العلوم الإدارية والتقنية</h4>
+                    <div class="grid grid-cols-2 gap-3">
+                        <span class="bg-gray-50 p-3 rounded-2xl font-bold border border-gray-200">إدارة أعمال</span>
+                        <span class="bg-gray-50 p-3 rounded-2xl font-bold border border-gray-200">محاسبة</span>
+                        <span class="bg-gray-50 p-3 rounded-2xl font-bold border border-gray-200">نظم معلومات إدارية</span>
+                        <span class="bg-gray-50 p-3 rounded-2xl font-bold border border-gray-200">شريعة وقانون</span>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <section id="contact" class="py-16 container mx-auto px-4">
-        <div class="bg-black text-white rounded-[60px] p-8 md:p-16 relative shadow-2xl border-t-4 border-yellow-600 overflow-hidden">
-            <div class="grid lg:grid-cols-2 gap-12 relative z-10 text-right">
-                <div class="space-y-8">
-                    <h3 class="uni-title text-5xl font-bold italic leading-tight">تواصل معنا <br><span class="text-yellow-600">مباشرة الآن</span></h3>
-                    <div class="space-y-8 font-bold">
-                        <div class="flex items-start gap-4">
-                            <i class="fas fa-map-marker-alt text-yellow-500 text-2xl mt-1"></i>
-                            <div><h5 class="text-yellow-600 mb-1 italic">المقر الرئيسي:</h5><p id="out-address" class="text-lg opacity-90"></p></div>
-                        </div>
-                        <a id="out-phone-link" href="#" target="_blank" class="flex items-center gap-4 group">
-                            <div class="w-12 h-12 rounded-full border border-yellow-600 flex items-center justify-center group-hover:bg-green-600 transition"><i class="fab fa-whatsapp text-green-500 group-hover:text-white text-2xl"></i></div>
-                            <div><h5 class="text-green-500 mb-1 italic">واتساب الجامعة:</h5><span id="out-phone" class="text-2xl font-bold tracking-tighter"></span></div>
-                        </a>
-                        <a id="out-fb-link" href="#" target="_blank" class="flex items-center gap-4 group">
-                            <div class="w-12 h-12 rounded-full border border-yellow-600 flex items-center justify-center group-hover:bg-blue-600 transition"><i class="fab fa-facebook-f text-blue-500 group-hover:text-white text-xl"></i></div>
-                            <span class="text-lg opacity-80 italic hover:text-yellow-500 font-bold transition">صفحة الفيسبوك الرسمية</span>
-                        </a>
-                    </div>
+        <div class="bg-black text-white rounded-[50px] p-8 md:p-16 border-t-4 border-yellow-600">
+            <div class="grid lg:grid-cols-2 gap-12 text-right font-bold">
+                <div class="space-y-6">
+                    <h3 class="uni-title text-5xl text-yellow-600 italic">تواصل معنا</h3>
+                    <p id="out-address" class="text-lg opacity-80 leading-relaxed border-r-4 border-yellow-600 pr-4"></p>
+                    <a id="out-phone-link" href="#" target="_blank" class="flex items-center gap-4 text-2xl group">
+                        <i class="fab fa-whatsapp text-green-500 group-hover:scale-125 transition"></i>
+                        <span id="out-phone"></span>
+                    </a>
                 </div>
-
-                <div class="bg-white text-black p-10 rounded-[50px] shadow-2xl transform lg:rotate-2">
-                    <h4 class="uni-title font-bold mb-6 border-b pb-4 text-2xl italic text-yellow-700">أرسل استفسارك الآن</h4>
-                    <form id="enquiryForm" class="space-y-5 font-bold">
-                        <input type="text" id="studentName" placeholder="الاسم الكامل" required class="w-full p-4 bg-gray-100 rounded-2xl outline-none focus:border-yellow-600 border-2 border-transparent">
-                        <input type="text" id="studentPhone" placeholder="رقم واتسابك (967...)" required class="w-full p-4 bg-gray-100 rounded-2xl outline-none focus:border-yellow-600 border-2 border-transparent">
-                        <textarea id="studentMsg" placeholder="ما هو استفسارك؟" required class="w-full p-4 bg-gray-100 rounded-2xl h-28 outline-none focus:border-yellow-600 border-2 border-transparent"></textarea>
-                        <button type="button" onclick="sendToWhatsApp()" class="w-full bg-black text-white font-bold py-5 rounded-3xl hover:bg-yellow-600 transition shadow-2xl text-xl">إرسال عبر واتساب <i class="fab fa-whatsapp mr-2"></i></button>
+                <div class="bg-white text-black p-8 rounded-[40px] shadow-2xl">
+                    <form class="space-y-4">
+                        <input type="text" id="studentName" placeholder="الاسم الكامل" class="w-full p-4 bg-gray-100 rounded-2xl outline-none">
+                        <input type="text" id="studentPhone" placeholder="رقم الواتساب" class="w-full p-4 bg-gray-100 rounded-2xl outline-none">
+                        <textarea id="studentMsg" placeholder="استفسارك.." class="w-full p-4 bg-gray-100 rounded-2xl h-24 outline-none"></textarea>
+                        <button type="button" onclick="sendToWhatsApp()" class="w-full bg-black text-white py-4 rounded-3xl font-black text-lg">إرسال الاستفسار <i class="fab fa-whatsapp mr-2"></i></button>
                     </form>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="py-12 text-center text-gray-500 text-sm font-bold border-t">
-        <p class="mb-2 italic text-gray-800 text-lg uni-title">جامعة الأقصى للعلوم والتكنولوجيا</p>
-        <p class="opacity-60 italic tracking-widest">&copy; 2024 جميع الحقوق محفوظة لجامعة الأقصى - صنعاء</p>
+    <footer class="py-8 text-center text-gray-500 font-bold border-t">
+        <p class="uni-title text-black text-lg">جامعة الأقصى للعلوم والتكنولوجيا</p>
+        <p class="text-xs opacity-60">جميع الحقوق محفوظة &copy; 2025</p>
     </footer>
 
     <script>
@@ -217,47 +189,26 @@
             rector: "الدكتور حمود القديمي",
             sec: "الدكتور خالد مساعد",
             phone: "967781555637",
-            fbUrl: "https://facebook.com",
             address: "الجمهورية اليمنية - صنعاء - الحتارش - شارع الجامعة - بعد أسواق اليمن السعيد",
-            newsTitle: "بدء القبول والتسجيل للعام الدراسي 2024/2025",
-            newsDesc: "تعلن الجامعة عن فتح باب التسجيل في كليات العلوم الطبية والعلوم الإدارية والتقنية..",
-            aboutText: "تعتبر جامعة الأقصى صرحاً أكاديمياً يهدف لتخريج كوادر مؤهلة علمياً وعملياً.",
-            vision: "التميز في جودة التعليم العالي والبحث العلمي وبناء شراكات مجتمعية.",
-            mission: "تقديم برامج أكاديمية متطورة تلبي احتياجات التنمية مجتمع المعرفة."
+            newsTitle: "بدء التسجيل للعام الدراسي 2024/2025 في كافة الكليات",
+            newsDesc: "تعلن الجامعة عن فتح باب القبول في تخصصات الصيدلة، المحاسبة، ونظم المعلومات..",
+            aboutText: "جامعة الأقصى صرح أكاديمي رائد يسعى لتخريج كوادر مؤهلة علمياً.",
+            vision: "التميز العالمي في التعليم العالي والبحث العلمي.",
+            mission: "تقديم تعليم نوعي يساهم في التنمية المستدامة."
         };
 
         function showLogin() { document.getElementById('loginModal').classList.remove('hidden'); }
-        function closeLogin() { document.getElementById('loginModal').classList.add('hidden'); }
         function toggleAdmin() { document.getElementById('adminPanel').classList.toggle('active'); }
         function checkLogin() {
             if(document.getElementById('passInput').value === MASTER_PASS) {
-                localStorage.setItem('univ_auth_final_v7', 'active');
+                localStorage.setItem('auth_final', 'active');
                 location.reload();
-            } else { alert('كلمة المرور غير صحيحة'); }
+            } else { alert('كلمة المرور خطأ'); }
         }
-        function logout() { localStorage.removeItem('univ_auth_final_v7'); location.reload(); }
-
-        function saveChanges() {
-            const data = {
-                logo: document.getElementById('in-logo').value,
-                founder: defaultData.founder, // يحتفظ بالقيم الافتراضية إذا لم تضف خانات لها
-                rector: defaultData.rector,
-                sec: defaultData.sec,
-                phone: document.getElementById('in-phone').value.replace(/\s+/g, ''),
-                fbUrl: document.getElementById('in-fb').value,
-                address: document.getElementById('in-address').value,
-                newsTitle: document.getElementById('in-news-title').value,
-                newsDesc: document.getElementById('in-news-desc').value,
-                aboutText: document.getElementById('in-about-text').value,
-                vision: document.getElementById('in-vision').value,
-                mission: document.getElementById('in-mission').value
-            };
-            localStorage.setItem('aqsa_data_v7', JSON.stringify(data));
-            location.reload();
-        }
+        function logout() { localStorage.removeItem('auth_final'); location.reload(); }
 
         function applyData() {
-            const saved = JSON.parse(localStorage.getItem('aqsa_data_v7')) || defaultData;
+            const saved = JSON.parse(localStorage.getItem('aqsa_final')) || defaultData;
             document.getElementById('out-logo').src = saved.logo;
             document.getElementById('out-founder').innerText = saved.founder;
             document.getElementById('out-rector').innerText = saved.rector;
@@ -265,45 +216,47 @@
             document.getElementById('out-phone').innerText = "+" + saved.phone;
             document.getElementById('out-address').innerText = saved.address;
             document.getElementById('out-phone-link').href = `https://wa.me/${saved.phone}`;
-            document.getElementById('out-fb-link').href = saved.fbUrl;
             document.getElementById('out-news-title').innerText = saved.newsTitle;
             document.getElementById('out-about-text').innerText = saved.aboutText;
             document.getElementById('out-vision').innerText = saved.vision;
             document.getElementById('out-mission').innerText = saved.mission;
 
-            // ملء لوحة التحكم
+            // ملء الحقول في الإدارة
             document.getElementById('in-logo').value = saved.logo;
             document.getElementById('in-news-title').value = saved.newsTitle;
             document.getElementById('in-news-desc').value = saved.newsDesc;
             document.getElementById('in-phone').value = saved.phone;
-            document.getElementById('in-fb').value = saved.fbUrl;
             document.getElementById('in-address').value = saved.address;
             document.getElementById('in-about-text').value = saved.aboutText;
             document.getElementById('in-vision').value = saved.vision;
             document.getElementById('in-mission').value = saved.mission;
         }
 
-        function openNews() {
-            const saved = JSON.parse(localStorage.getItem('aqsa_data_v7')) || defaultData;
-            document.getElementById('modal-news-title').innerText = saved.newsTitle;
-            document.getElementById('modal-news-desc').innerText = saved.newsDesc;
-            document.getElementById('newsModal').classList.remove('hidden');
+        function saveChanges() {
+            const data = {
+                logo: document.getElementById('in-logo').value,
+                founder: defaultData.founder, rector: defaultData.rector, sec: defaultData.sec,
+                phone: document.getElementById('in-phone').value,
+                address: document.getElementById('in-address').value,
+                newsTitle: document.getElementById('in-news-title').value,
+                newsDesc: document.getElementById('in-news-desc').value,
+                aboutText: document.getElementById('in-about-text').value,
+                vision: document.getElementById('in-vision').value,
+                mission: document.getElementById('in-mission').value
+            };
+            localStorage.setItem('aqsa_final', JSON.stringify(data));
+            location.reload();
         }
-        function closeNews() { document.getElementById('newsModal').classList.add('hidden'); }
 
         function sendToWhatsApp() {
-            const saved = JSON.parse(localStorage.getItem('aqsa_data_v7')) || defaultData;
-            const name = document.getElementById('studentName').value;
-            const phone = document.getElementById('studentPhone').value;
-            const msg = document.getElementById('studentMsg').value;
-            if(!name || !phone || !msg) { alert('يرجى ملء الحقول'); return; }
-            const text = `*استفسار جديد*%0A*الاسم:* ${name}%0A*الواتساب:* ${phone}%0A*الرسالة:* ${msg}`;
+            const saved = JSON.parse(localStorage.getItem('aqsa_final')) || defaultData;
+            const text = `*طلب استفسار جديد*%0A*الاسم:* ${document.getElementById('studentName').value}%0A*الرسالة:* ${document.getElementById('studentMsg').value}`;
             window.open(`https://wa.me/${saved.phone}?text=${text}`, '_blank');
         }
 
         window.onload = function() {
             applyData();
-            if(localStorage.getItem('univ_auth_final_v7') === 'active') {
+            if(localStorage.getItem('auth_final') === 'active') {
                 document.body.classList.add('is-admin');
                 document.getElementById('adminTools').classList.remove('hidden');
                 document.getElementById('loginBtn').style.display = 'none';
