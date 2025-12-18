@@ -78,8 +78,11 @@
                 <label class="text-[10px] text-gray-400 block mb-1">عن الجامعة</label>
                 <textarea id="in-about-text" class="w-full bg-slate-700 p-2 rounded h-20 text-xs outline-none"></textarea>
             </div>
-            <button onclick="saveChanges()" class="w-full bg-yellow-600 text-black font-bold py-3 rounded-xl hover:bg-yellow-500 transition mt-4 shadow-lg">حفظ التعديلات</button>
-            <button onclick="logout()" class="w-full bg-red-600 py-2 rounded-lg mt-2 text-xs opacity-80 hover:opacity-100">خروج</button>
+            
+            <div class="pt-4 space-y-2">
+                <button onclick="saveChanges()" class="w-full bg-yellow-600 text-black font-bold py-3 rounded-xl hover:bg-yellow-500 transition shadow-lg">حفظ التعديلات</button>
+                <button onclick="logout()" class="w-full bg-red-600 text-white font-bold py-2 rounded-xl hover:bg-red-700 transition opacity-90">تسجيل الخروج</button>
+            </div>
         </div>
     </div>
 
@@ -117,7 +120,6 @@
                 <a href="#home" class="hover:text-yellow-500 transition">الرئيسية</a>
                 <a href="#about" class="hover:text-yellow-500 transition">عن الجامعة</a>
                 <a href="#faculties" class="hover:text-yellow-500 transition">الكليات</a>
-                <a href="#contact" class="hover:text-yellow-500 transition">تواصل معنا</a>
             </div>
             <button onclick="showLogin()" id="loginBtn" class="bg-yellow-600 text-black px-4 py-2 rounded-lg font-bold text-xs btn-hover">دخول</button>
             <button onclick="toggleAdmin()" id="adminTools" class="admin-btn bg-green-600 text-white px-4 py-2 rounded-lg hidden text-xs font-bold items-center gap-1 btn-hover"><i class="fas fa-cog"></i> الإدارة</button>
@@ -163,7 +165,7 @@
             <ul class="space-y-6">
                 <li class="flex items-center gap-4 border-b pb-4">
                     <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center text-yellow-500 font-bold italic">A.M</div>
-                    <div><p class="text-xs text-gray-400">المؤسس رئيس مجلس الأمناء </p><strong id="out-founder" class="text-lg text-black"></strong></div>
+                    <div><p class="text-xs text-gray-400">المؤسس رئيس مجلس الأمناء</p><strong id="out-founder" class="text-lg text-black"></strong></div>
                 </li>
                 <li class="flex items-center gap-4 border-b pb-4">
                     <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center text-yellow-500 font-bold italic">H.Q</div>
@@ -264,7 +266,13 @@
                 location.reload();
             } else { alert('كلمة المرور غير صحيحة!'); }
         }
-        function logout() { localStorage.removeItem('univ_master_v9'); location.reload(); }
+
+        // دالة تسجيل الخروج
+        function logout() { 
+            localStorage.removeItem('univ_master_v9'); 
+            alert('تم تسجيل الخروج بنجاح');
+            location.reload(); 
+        }
 
         function openNews() {
             const saved = JSON.parse(localStorage.getItem('aqsa_data_v9')) || defaultData;
